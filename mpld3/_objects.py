@@ -13,7 +13,6 @@ import numpy as np
 
 import matplotlib.axis
 from matplotlib.lines import Line2D
-from matplotlib.image import imsave
 from matplotlib.path import Path
 from matplotlib.text import Text
 from matplotlib.patches import Patch
@@ -877,9 +876,15 @@ class D3Image(D3Base):
         return base64.b64encode(binary_buffer.read()).decode('utf-8')
 
     def _html_args(self):
+        extent=(self.ax.xaxis.get_view_interval()[0],
+                self.ax.xaxis.get_view_interval()[1],
+                self.ax.yaxis.get_view_interval()[0],
+                self.ax.yaxis.get_view_interval()[1])
+        warnings.warn(repr(self.image.get_extent()))
+        warnings.warn(repr(extent))
         return dict(imageid=self.imageid,
                     base64_data=self.get_base64_data(),
-                    extent=json.dumps(self.image.get_extent()))
+                    extent=json.dumps(extent))
 
     def _style_args(self):
         return dict(imageid=self.imageid,
